@@ -128,3 +128,4 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .progress-track{height:6px;margin-top:7px;background:#2a2a2d;overflow:hidden}
 .progress-track i{display:block;height:100%;background:#01cdfe;transition:width .05s linear}
 .error{padding:8px 10px;background:#3b1717;color:#fca5a5;font-size:12px;margin-top:10px}
+
