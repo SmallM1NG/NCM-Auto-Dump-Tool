@@ -1,3 +1,4 @@
+// NADT frontend application
 import React,{useCallback,useEffect,useRef,useState}from'react';import{createRoot}from'react-dom/client';import{getCurrentWindow}from'@tauri-apps/api/window';import{invoke}from'@tauri-apps/api/core';import{listen}from'@tauri-apps/api/event';import{open}from'@tauri-apps/plugin-dialog';import{Activity,FolderOpen,Upload,FileAudio,FileText}from'lucide-react';import logoUrl from'./assets/NADT.png';import'./app.css';import'./theme.css';
 const win=getCurrentWindow();
 const IconMin=()=> <svg className="win-icon" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="5.5" width="9" height="1"/></svg>;
