@@ -486,3 +486,4 @@ mod tests {
         assert!(!out.windows(3).any(|w| w == b"Old"));
     }
 }
+
