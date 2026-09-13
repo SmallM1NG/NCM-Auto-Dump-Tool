@@ -1,4 +1,4 @@
-import React,{useCallback,useEffect,useRef,useState}from'react';import{createRoot}from'react-dom/client';import{getCurrentWindow}from'@tauri-apps/api/window';import{invoke}from'@tauri-apps/api/core';import{listen}from'@tauri-apps/api/event';import{open}from'@tauri-apps/plugin-dialog';import{openUrl}from'@tauri-apps/plugin-opener';import{Activity,FolderOpen,Upload,FileAudio,FileText}from'lucide-react';import logoUrl from'./assets/NADT.png';import'./app.css';import'./theme.css';
+import React,{useCallback,useEffect,useRef,useState}from'react';import{createRoot}from'react-dom/client';import{getCurrentWindow}from'@tauri-apps/api/window';import{invoke}from'@tauri-apps/api/core';import{listen}from'@tauri-apps/api/event';import{open}from'@tauri-apps/plugin-dialog';import{openUrl}from'@tauri-apps/plugin-opener';import{Activity,FolderOpen,Upload,FileAudio,FileText,Trash2}from'lucide-react';import logoUrl from'./assets/NADT.png';import'./app.css';import'./theme.css';
 const win=getCurrentWindow();
 const IconMin=()=> <svg className="win-icon" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="5.5" width="9" height="1"/></svg>;
 const IconMax=()=> <svg className="win-icon" viewBox="0 0 12 12" aria-hidden="true"><rect x="1.5" y="1.5" width="9" height="9" fill="none" stroke="currentColor" strokeWidth="1"/></svg>;
@@ -72,22 +72,9 @@ function App(){
     return {ncm,lrc,other,total:paths.length};
   };
   const handleDrop=async paths=>{
-    const {ncm,lrc,other}=classify(paths);
-    if(other.length){
-      setLogs(xs=>[...xs,`[${new Date().toLocaleTimeString('zh-CN',{hour12:false})}] [ERROR] 已忽略 ${other.length} 个不支持的文件`].slice(-200));
-    }
-    if(lrc.length){
-      setLogs(xs=>[...xs,`[${new Date().toLocaleTimeString('zh-CN',{hour12:false})}] [INFO] 收到 ${lrc.length} 个 LRC，将随同名 NCM 自动使用`].slice(-200));
-    }
-    if(!ncm.length){
-      if(!other.length&&lrc.length){
-        setLogs(xs=>[...xs,`[${new Date().toLocaleTimeString('zh-CN',{hour12:false})}] [ERROR] 只收到 LRC，请同时拖入对应的 NCM 文件`].slice(-200));
-      }
-      return;
-    }
-    try{await invoke('enqueue_files',{paths:ncm})}catch(e){
-      setLogs(xs=>[...xs,`[${new Date().toLocaleTimeString('zh-CN',{hour12:false})}] [ERROR] ${String(e)}`].slice(-200));
-    }
+    const {ncm}=classify(paths);
+    if(!ncm.length)return;
+    try{await invoke('enqueue_files',{paths:ncm})}catch(e){console.error(e)}
   };
 
   useEffect(()=>{
@@ -95,7 +82,7 @@ function App(){
      const unlisteners=[];
      listen('log-message',e=>setLogs(xs=>[...xs,String(e.payload)].slice(-200))).then(f=>unlisteners.push(f));
      listen('queue-state',e=>setQueue(q=>({...q,...e.payload}))).then(f=>unlisteners.push(f));
-     listen('queue-progress',e=>{const x=e.payload||{};if(typeof x.total==='number'&&x.total>0){setTotal(x.total);latest.current.total_processed=x.total}setQueue(q=>{const done=x.state==='completed'||x.state==='failed';return{...q,waiting:x.queued??q.waiting,processed:typeof x.processed==='number'?x.processed:q.processed,file:x.file||q.file,status:x.status||q.status,progress:done?0:(typeof x.progress==='number'?x.progress:q.progress)}})}).then(f=>unlisteners.push(f));
+     listen('queue-progress',e=>{const x=e.payload||{};if(typeof x.total==='number'&&x.total>0){setTotal(x.total);latest.current.total_processed=x.total}setQueue(q=>{const done=x.state==='completed'||x.state==='failed';return{...q,waiting:x.queued??q.waiting,processed:typeof x.processed==='number'?x.processed:q.processed,file:x.file||q.file,status:x.status||q.status,progress:done?(x.state==='completed'?100:0):(typeof x.progress==='number'?x.progress:q.progress)}})}).then(f=>unlisteners.push(f));
      // Native file drag-and-drop: Tauri reports the hovered paths, and the
      // overlay only stays up while the pointer is over the window.
      const onDragEnter=e=>{setDragging(true);setDropInfo(classify(e.payload?.paths||[]))};
@@ -144,21 +131,20 @@ function App(){
     if(key==='download_dir'){
       try{
         const resolved=await invoke('resolve_download_dir',{path:p});
-        if(!resolved){appendError('所选目录无效：请选择包含 VipSongsDownload 的下载根目录，或直接选择 VipSongsDownload 文件夹');return}
+        if(!resolved){appendLog('ERROR','所选目录无效：请选择包含 VipSongsDownload 的下载根目录，或直接选择 VipSongsDownload 文件夹');return}
         update({[key]:resolved},true);
-        setLogs(xs=>[...xs,`[${new Date().toLocaleTimeString('zh-CN',{hour12:false})}] [INFO] 监控目录: ${resolved}`].slice(-200));
-      }catch(e){appendError(e)}
+      }catch(e){console.error(e)}
     }else{
       update({[key]:p},true);
     }
   };
-  const appendError=e=>setLogs(xs=>[...xs,`[${new Date().toLocaleTimeString('zh-CN',{hour12:false})}] [ERROR] ${String(e)}`].slice(-200));
+  const appendLog=(level,message)=>setLogs(xs=>[...xs,`[${new Date().toLocaleTimeString('zh-CN',{hour12:false})}] [${level}] ${message}`].slice(-200));
   const start=async()=>{
     // Keep the session tally: only the pending depth and progress reset.
-    try{await invoke('save_config',{config:latest.current});setQueue(q=>({...q,waiting:0,file:'暂无',status:'空闲',progress:0}));await invoke('start_monitor');setRunning(true)}catch(e){appendError(e)}
+    try{await invoke('save_config',{config:latest.current});setQueue(q=>({...q,waiting:0,file:'暂无',status:'空闲',progress:0}));await invoke('start_monitor');setRunning(true)}catch(e){console.error(e)}
   };
   const stop=async()=>{
-    try{await invoke('stop_monitor');setRunning(false);setQueue(q=>({...q,waiting:0,file:'暂无',status:'已停止',progress:0}))}catch(e){appendError(e)}  };
+    try{await invoke('stop_monitor');setRunning(false);setQueue(q=>({...q,waiting:0,file:'暂无',status:'已停止',progress:0}))}catch(e){console.error(e)}  };
   const toggle=()=>running?stop():start();
   const act=fn=>e=>{e.preventDefault();e.stopPropagation();fn()};
 
@@ -183,7 +169,7 @@ function App(){
     </div>
     <main className="window">
       <section className="card directories"><h2>目录设置</h2>
-        <label>网易云下载目录<div className="path"><input value={cfg.download_dir} onChange={e=>update({download_dir:e.target.value})} onBlur={flush} placeholder="选择下载目录"/><button className="browse-btn" onClick={()=>browse('download_dir')}><FolderOpen size={13} strokeWidth={2.25} aria-hidden="true"/>浏览</button></div></label>
+        <label><span className="directory-label">下载目录<Hint text={'选择网易云的下载目录\n请选择到 VipSongsDownload 文件夹'}/></span><div className="path"><input value={cfg.download_dir} onChange={e=>update({download_dir:e.target.value})} onBlur={flush} placeholder="选择下载目录"/><button className="browse-btn" onClick={()=>browse('download_dir')}><FolderOpen size={13} strokeWidth={2.25} aria-hidden="true"/>浏览</button></div></label>
         <label>输出目录<div className="path"><input value={cfg.output_dir} onChange={e=>update({output_dir:e.target.value})} onBlur={flush} placeholder="选择输出目录"/><button className="browse-btn" onClick={()=>browse('output_dir')}><FolderOpen size={13} strokeWidth={2.25} aria-hidden="true"/>浏览</button></div></label>
       </section>
       <div className="settings-grid">
@@ -206,14 +192,14 @@ function App(){
            <button type="button" className="theme-button" onClick={()=>{const next=themeOrder[(themeOrder.indexOf(cfg.theme)+1)%themeOrder.length];update({theme:next},true)}}>{theme}</button>
         </div>
       </section>
-      <section className="card log-card"><div className="log-head"><h2>运行日志</h2><label className="log-auto"><input type="checkbox" checked={autoScroll} onChange={e=>setAutoScroll(e.target.checked)}/><span>自动滚动</span></label></div><pre className="log-box">{logs.length?logs.map((line,i)=><React.Fragment key={i}><span className={line.includes('[ERROR]')?'log-error':''}>{line}</span>{i<logs.length-1?'\n':''}</React.Fragment>):'暂无日志'}<span ref={logEnd}/></pre></section>
+      <section className="card log-card"><div className="log-head"><h2>运行日志</h2><div className="log-actions"><button type="button" className="log-clear" onClick={()=>setLogs([])} title="清理当前显示的日志" aria-label="清理当前显示的日志"><Trash2 size={14} strokeWidth={2} aria-hidden="true"/><span>清空</span></button><label className="log-auto"><input type="checkbox" checked={autoScroll} onChange={e=>setAutoScroll(e.target.checked)}/><span>自动滚动</span></label></div></div><pre className="log-box">{logs.length?logs.map((line,i)=><React.Fragment key={i}><span className={line.includes('[ERROR]')?'log-error':''}>{line}</span>{i<logs.length-1?'\n':''}</React.Fragment>):'暂无日志'}<span ref={logEnd}/></pre></section>
       <section className="card queue-card"><div className="queue-head"><h2>队列状态</h2><span className="queue-counts"><b>{queue.waiting}</b> 等待 / <b>{queue.processed}</b> 已完成</span></div><div className="queue-current"><span className="queue-file" title={queue.file}>{queue.file}</span><b className="queue-status" title={queue.status}>{queue.status}</b></div><div className="progress-track"><i style={{width:`${queue.progress}%`}}/></div></section>
       <footer>
         <a className="gh-link" href="https://github.com/SmallM1NG/NCM-Auto-Dump-Tool" target="_blank" rel="noreferrer" onClick={e=>{e.preventDefault();openUrl('https://github.com/SmallM1NG/NCM-Auto-Dump-Tool')}} aria-label="GitHub"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg><span key={starMsg} className="star-message">{starMessages[starMsg]}</span></a>
-        <div className="footer-actions"><button className="secondary" onClick={()=>invoke('clear_notification_registry').catch(e=>appendError(e))}><Hint text="清除系统通知注册表"/>扫地出门</button><button className={running?'danger':'primary'} onClick={toggle}><Activity className={`mon-icon${running?' beating':''}`} size={14} strokeWidth={2.25} aria-hidden="true"/>{running?'停止监控':'启用监控'}</button></div>
+        <div className="footer-actions"><button className="secondary" onClick={()=>invoke('clear_notification_registry').catch(console.error)}><Hint text="清除系统通知注册表"/>扫地出门</button><button className={running?'danger':'primary'} onClick={toggle}><Activity className={`mon-icon${running?' beating':''}`} size={14} strokeWidth={2.25} aria-hidden="true"/>{running?'停止监控':'启用监控'}</button></div>
       </footer>
     </main>
-    {updateNotice&&<div className="update-overlay"><div className="update-card"><h2>{updateState==='checking'?'正在检查更新':updateState==='available'?'检测到新版本':updateState==='timeout'||updateState==='error'?'查询失败':'当前已是最新版本'}</h2><p>{updateState==='checking'?'正在查询 GitHub 最新版本，请稍候':updateState==='available'?<>发现新版本 <b className="latest-version">{latestVersion||'v0.1.1'}</b>，是否打开浏览器下载？</>:updateState==='timeout'?'连接超时，超过10秒未能完成查询':updateState==='error'?'查询失败，请稍后重试':'未检测到版本更新'}</p>{updateState==='checking'&&<div className="update-countdown">将在 {updateCountdown} 秒后超时</div>}<div className="update-actions">{updateState==='available'&&<><button className="secondary" onClick={()=>setUpdateNotice(false)}>否</button><button className="primary" onClick={()=>{setUpdateNotice(false);openUrl(releaseUrl)}}>是</button></>} {updateState!=='available'&&updateState!=='checking'&&<button className="primary" onClick={()=>setUpdateNotice(false)}>确定</button>}</div></div></div>}{dropMounted&&<div className={`drop-overlay${dropShown?' shown':''}`}>
+    {updateNotice&&<div className="update-overlay"><div className="update-card"><h2>{updateState==='checking'?'正在检查更新':updateState==='available'?'检测到新版本':updateState==='timeout'||updateState==='error'?'查询失败':'当前已是最新版本'}</h2><p>{updateState==='checking'?'正在查询 GitHub 最新版本，请稍候':updateState==='available'?<>发现新版本 <b className="latest-version">{latestVersion||'v0.1.2'}</b>，是否打开浏览器下载？</>:updateState==='timeout'?'连接超时，超过10秒未能完成查询':updateState==='error'?'查询失败，请稍后重试':'未检测到版本更新'}</p>{updateState==='checking'&&<div className="update-countdown">将在 {updateCountdown} 秒后超时</div>}<div className="update-actions">{updateState==='available'&&<><button className="secondary" onClick={()=>setUpdateNotice(false)}>否</button><button className="primary" onClick={()=>{setUpdateNotice(false);openUrl(releaseUrl)}}>是</button></>} {updateState!=='available'&&updateState!=='checking'&&<button className="primary" onClick={()=>setUpdateNotice(false)}>确定</button>}</div></div></div>}{dropMounted&&<div className={`drop-overlay${dropShown?' shown':''}`}>
       <div className="drop-card">
         <Upload className="drop-icon" size={38} strokeWidth={1.5} aria-hidden="true"/>
         <div className="drop-title">松开以加入队列</div>
