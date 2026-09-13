@@ -45,10 +45,7 @@ pub fn process_job(app: &tauri::AppHandle, cfg: &Config, output: &std::path::Pat
     });
     let out = match result {
         Ok(p) => p,
-        Err(e) => {
-            crate::logger::write(Some(app), "ERROR", format!("处理失败 {}: {}", filename, e));
-            return Err(e.to_string());
-        }
+        Err(e) => return Err(e.to_string()),
     };
     crate::logger::write(Some(app), "INFO", format!("解密完成: {} → {}", filename, out.file_name().unwrap_or_default().to_string_lossy()));
 
@@ -82,8 +79,6 @@ pub fn process_job(app: &tauri::AppHandle, cfg: &Config, output: &std::path::Pat
         } else {
             crate::logger::write(Some(app), "INFO", "未发现同名 LRC 文件，跳过写入歌词");
         }
-    } else {
-        crate::logger::write(Some(app), "INFO", "已禁用歌词嵌入，跳过写入歌词");
     }
 
     // Trimming runs last so it also removes tags the lyrics step added.
@@ -92,8 +87,6 @@ pub fn process_job(app: &tauri::AppHandle, cfg: &Config, output: &std::path::Pat
         let ok = if is_flac { crate::audio_tags::minimal_flac(&out).is_ok() }
             else { crate::audio_tags::minimal_id3(&out).is_ok() };
         crate::logger::write(Some(app), if ok {"INFO"} else {"ERROR"}, if ok { "极简模式: 已精简元数据".to_string() } else { "极简模式处理失败".to_string() });
-    } else {
-        crate::logger::write(Some(app), "INFO", "未启用极简模式，保留全部元数据");
     }
 
     if cfg.shred_mode {
@@ -101,8 +94,6 @@ pub fn process_job(app: &tauri::AppHandle, cfg: &Config, output: &std::path::Pat
         let ncm_ok = std::fs::remove_file(input).is_ok();
         let lrc_ok = std::fs::remove_file(input.with_extension("lrc")).is_ok();
         crate::logger::write(Some(app), if ncm_ok {"INFO"} else {"ERROR"}, format!("删除原始文件: NCM={} LRC={}", if ncm_ok {"成功"} else {"失败"}, if lrc_ok {"成功"} else {"无或失败"}));
-    } else {
-        crate::logger::write(Some(app), "INFO", "已禁用删除原始文件，保留源文件");
     }
 
     Ok(out)
