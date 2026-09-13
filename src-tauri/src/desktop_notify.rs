@@ -103,3 +103,4 @@ pub fn send_notification(event: &str, detail: &str, sound: bool) {
 pub fn send_notification(event: &str, detail: &str, _sound: bool) {
     let _ = (event, detail);
 }
+
