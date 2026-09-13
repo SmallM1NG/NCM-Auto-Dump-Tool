@@ -1,0 +1,47 @@
+/* 浅色主题与系统主题覆盖层 */
+:root[data-theme="light"]{color-scheme:light}
+:root[data-theme="system"]{color-scheme:light}
+@media (prefers-color-scheme:dark){:root[data-theme="system"]{color-scheme:dark}}
+:root[data-theme="light"],:root[data-theme="system"]{--bg:#f4f6f8;--surface:#fff;--surface-hover:#f8fafc;--border:#d7dde5;--text:#17202a;--muted:#687482;--input:#fff;--control:#e8edf2;--accent:#00AEAE}
+@media (prefers-color-scheme:dark){:root[data-theme="system"]{--bg:#0a0a0a;--surface:#121212;--surface-hover:#171717;--border:#2a2a2d;--text:#f3f4f6;--muted:#a1a1aa;--input:#0a0a0a;--control:#2a2a2d;--accent:#00AEAE}}
+:root[data-theme="light"] body,:root[data-theme="system"] body{background:var(--bg);color:var(--text)}
+:root[data-theme="light"] .titlebar,:root[data-theme="system"] .titlebar{background:var(--bg)}
+:root[data-theme="light"] .card,:root[data-theme="system"] .card{background:var(--surface);border-color:var(--border)}
+:root[data-theme="light"] .card:hover,:root[data-theme="system"] .card:hover{background:var(--surface-hover);border-color:#b8c3cf;box-shadow:0 4px 14px #26384a18}
+:root[data-theme="light"] .card label:not(.check),:root[data-theme="system"] .card label:not(.check),:root[data-theme="light"] .status,:root[data-theme="system"] .status,:root[data-theme="light"] .queue-head span,:root[data-theme="system"] .queue-head span{color:var(--muted)}
+:root[data-theme="light"] .path input,:root[data-theme="system"] .path input,.light-theme .path input{background:var(--input);color:var(--text);border-color:var(--border)}
+:root[data-theme="light"] .path input:hover,:root[data-theme="system"] .path input:hover{background:#fff;border-color:#aab7c4}
+:root[data-theme="light"] .path input:focus,:root[data-theme="system"] .path input:focus{background:#fff;border-color:#00AEAE;box-shadow:0 0 0 2px #00AEAE33}
+
+:root[data-theme="light"] .path button,:root[data-theme="system"] .path button,.theme-button{background:var(--control);color:var(--text);border:1px solid var(--border)}
+:root[data-theme="light"] .path button:hover,:root[data-theme="system"] .path button:hover,.theme-button:hover{background:#dce4eb}
+:root[data-theme="light"] .path .browse-btn,:root[data-theme="system"] .path .browse-btn{background:#e1f7f7;color:#00AEAE;border-color:#b8e5e5}
+:root[data-theme="light"] .path .browse-btn:hover,:root[data-theme="system"] .path .browse-btn:hover{background:#cceeee;color:#008b8b;border-color:#00AEAE}
+:root[data-theme="light"] .path .browse-btn:active,:root[data-theme="system"] .path .browse-btn:active{background:#b8e5e5}
+:root[data-theme="light"] .win-btn,:root[data-theme="system"] .win-btn{color:#4c5966}
+:root[data-theme="light"] .win-btn:hover,:root[data-theme="system"] .win-btn:hover{background:#dce4eb;color:#17202a}
+:root[data-theme="light"] .window,:root[data-theme="system"] .window{scrollbar-color:#aeb9c5 var(--bg)}
+:root[data-theme="light"] .window::-webkit-scrollbar-track,:root[data-theme="system"] .window::-webkit-scrollbar-track,:root[data-theme="light"] .window::-webkit-scrollbar-track-piece,:root[data-theme="system"] .window::-webkit-scrollbar-track-piece,:root[data-theme="light"] .window::-webkit-scrollbar-corner,:root[data-theme="system"] .window::-webkit-scrollbar-corner,:root[data-theme="light"] .log-box,:root[data-theme="system"] .log-box{background:#eef2f5}
+:root[data-theme="light"] .window::-webkit-scrollbar-thumb,:root[data-theme="system"] .window::-webkit-scrollbar-thumb,:root[data-theme="light"] .log-box::-webkit-scrollbar-thumb,:root[data-theme="system"] .log-box::-webkit-scrollbar-thumb{background:#aeb9c5!important;border:2px solid #eef2f5!important;border-radius:0!important}
+:root[data-theme="light"] .window::-webkit-scrollbar-thumb:hover,:root[data-theme="system"] .window::-webkit-scrollbar-thumb:hover,:root[data-theme="light"] .log-box::-webkit-scrollbar-thumb:hover,:root[data-theme="system"] .log-box::-webkit-scrollbar-thumb:hover{background:#7d8d9b!important}
+:root[data-theme="light"] .card:hover h2,:root[data-theme="system"] .card:hover h2,:root[data-theme="light"] .gh-link:hover,:root[data-theme="system"] .gh-link:hover{color:#17202a}
+:root[data-theme="light"] ::selection,:root[data-theme="system"] ::selection{background:#b8dbea;color:#17202a}
+:root[data-theme="light"] .progress-track,:root[data-theme="system"] .progress-track{background:#d7dfe6}
+:root[data-theme="light"] .progress-track i,:root[data-theme="system"] .progress-track i{background:#00AEAE}
+:root[data-theme="light"] .log-box,:root[data-theme="system"] .log-box{border-color:var(--border);color:#00AEAE;scrollbar-color:#aeb9c5 #eef2f5}
+:root[data-theme="light"] .secondary,:root[data-theme="system"] .secondary{background:var(--surface);color:var(--text);border-color:var(--border)}
+:root[data-theme="light"] .primary,:root[data-theme="system"] .primary{background:#17202a;color:#fff}
+:root[data-theme="light"] .check:hover,:root[data-theme="system"] .check:hover{background:#17202a0c;color:var(--text)}
+:root[data-theme="light"] .queue-current,:root[data-theme="system"] .queue-current{color:#17202a}
+:root[data-theme="light"] .queue-current b,:root[data-theme="system"] .queue-current b{color:#17202a}
+:root[data-theme="light"] .queue-counts b,:root[data-theme="system"] .queue-counts b{color:#17202a}
+:root[data-theme="light"] .check input,:root[data-theme="system"] .check input{accent-color:#000000}
+.settings-row>.check,.settings-row>.theme-button{width:100%;min-width:0;align-self:center}
+:root[data-theme="light"] .drop-overlay,:root[data-theme="system"] .drop-overlay{background:#eef3f6dd}
+:root[data-theme="light"] .drop-card,:root[data-theme="system"] .drop-card{background:#ffffffed;border-color:#00AEAE;box-shadow:0 10px 30px #29465522}
+:root[data-theme="light"] .drop-icon,:root[data-theme="system"] .drop-icon{color:#00AEAE}
+:root[data-theme="light"] .drop-title,:root[data-theme="system"] .drop-title{color:#17202a}
+:root[data-theme="light"] .drop-hint,:root[data-theme="system"] .drop-hint{color:#687482}
+:root[data-theme="light"] .drop-tag.ok,:root[data-theme="system"] .drop-tag.ok{color:#008b8b;border-color:#b8e5e5;background:#e1f7f7}
+:root[data-theme="light"] .drop-tag.bad,:root[data-theme="system"] .drop-tag.bad{color:#b42318;border-color:#f1c3bf;background:#fff0ee}
+.theme-button{grid-column:auto;height:26px;padding:3px 2px;font-size:12px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}

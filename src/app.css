@@ -1,0 +1,130 @@
+*{box-sizing:border-box}html,body,#root{width:100%;height:100%;margin:0;overflow:hidden}body{font-family:Segoe UI,system-ui,sans-serif;color:#f3f4f6;background:#0a0a0a}
+
+.titlebar{position:relative;z-index:40;height:36px;flex:none;display:flex;align-items:center;justify-content:space-between;padding-left:0;background:#0a0a0a;border-bottom:none;user-select:none}
+.brand{display:flex;align-items:center;gap:7px;padding-left:10px;font-size:14px;font-weight:700;height:100%;position:relative;left:-2px}
+/* Both labels share one baseline, which is what actually lines up their
+   visual bottoms; line-height:1 keeps each glyph box tight. */
+.brand>span{display:block;line-height:1}
+.brand b{display:grid;place-items:center;width:16px;height:16px;font-size:11px;background:#fafafa;color:#0a0a0a}
+/* Slightly smaller than the 28px bar so the logo is centred with breathing
+   room instead of touching both edges. */
+.brand-logo{width:24px;height:24px;display:block;object-fit:contain;flex:none;align-self:center}
+.brand-title,.brand-version{align-self:center;transform:translateX(-2px)}
+.brand-version{font-size:12px;font-weight:400;color:#6b6b6b;position:relative;top:1px;transform:translateX(-4px)}
+.window-actions{height:100%;display:flex}
+.titlebar-right{display:flex;align-items:center;height:100%}
+.titlebar-right .status{padding:0 12px;font-size:12px;line-height:1}
+.win-btn{width:38px;height:36px;padding:0;border:0;background:transparent;display:flex;align-items:center;justify-content:center;color:#d1d5db;cursor:pointer;transition:background .15s ease,color .15s ease}
+.win-icon{width:10px;height:10px;display:block;flex:none;fill:currentColor}
+.win-btn:hover{background:#2a2a2d;color:#fafafa}
+.win-btn:active{background:#3a3a3a}
+.win-btn.close:hover{background:#dc2626;color:#fff}
+
+.window{position:relative;width:100%;flex:1;min-height:0;margin:0 auto;padding:0 8px 12px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:6px;scrollbar-width:thin;scrollbar-color:#3f4148 #0a0a0a}
+.window::-webkit-scrollbar{width:8px;height:8px;border-radius:0;-webkit-appearance:none}
+.window::-webkit-scrollbar-track,.window::-webkit-scrollbar-track-piece,.window::-webkit-scrollbar-corner,.window::-webkit-scrollbar-button{background:#0a0a0a;border-radius:0;-webkit-appearance:none}
+.window::-webkit-scrollbar-thumb{background:#3f4148;border:2px solid #0a0a0a;border-radius:0;-webkit-appearance:none}
+.window::-webkit-scrollbar-thumb:hover{background:#01cdfe;border-radius:0}
+.window>.card,.window>footer{flex:none}
+h1,h2,p{margin:0}
+h1{font-size:24px;line-height:1.1}
+.status{font-size:13px;color:#9ca3af;white-space:nowrap}
+.status i{display:inline-block;width:8px;height:8px;background:#737373;margin-right:7px}
+.status i.on{background:#4ade80;box-shadow:0 0 6px #4ade8080}
+
+.card{background:#121212;border:1px solid #2a2a2d;padding:10px;margin:0;box-shadow:none;transition:background .15s ease,border-color .15s ease,box-shadow .15s ease}
+.card:hover{background:#171717;border-color:#3f4148;box-shadow:0 0 0 1px #fafafa14,0 6px 18px #00000059}
+.card h2{font-size:13px;margin-bottom:6px;transition:color .15s ease}
+.card:hover h2{color:#fafafa}
+.card label:not(.check){display:block;font-size:12px;color:#a1a1aa;margin:6px 0}
+
+.path{display:flex;align-items:center;gap:6px;margin-top:6px}
+.path input{height:32px;flex:1;min-width:0;border:1px solid #3f4148;background:#0a0a0a;color:#f3f4f6;padding:0 8px;font:inherit;font-size:13px;line-height:30px;transition:border-color .15s ease,background .15s ease,box-shadow .15s ease}
+.path input:hover{border-color:#5a5a5a;background:#0e0e0e}
+.path input:focus{outline:none;border-color:#67e8f9;background:#0e0e0e;box-shadow:0 0 0 2px #67e8f926}
+
+.path button,button{border:0;padding:7px 13px;font:inherit;font-size:13px;cursor:pointer;transition:background .15s ease,color .15s ease,border-color .15s ease,opacity .15s ease}
+.path button{background:#2a2a2d;color:#f3f4f6}
+.path button:hover{background:#3a3a3a;color:#fafafa}
+.path button:active{background:#484848}
+/* A hint of accent makes the folder action easy to spot next to a plain input. */
+.path .browse-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:none;height:32px;padding:0 10px;background:#1b2a33;color:#67e8f9;border:1px solid #2b4552}
+.path .browse-btn svg{flex:none}
+.path .browse-btn:hover{background:#22404d;color:#a5f3fc;border-color:#67e8f9}
+.path .browse-btn:active{background:#2b5262}
+
+.check{display:flex;gap:6px;align-items:center;font-size:12px;margin:2px 0;padding:4px 6px;cursor:pointer;white-space:nowrap;transition:background .15s ease,color .15s ease}
+.check:hover{background:#fafafa0f;color:#fafafa}
+.check input{accent-color:#fafafa;width:15px;height:15px;min-width:15px;min-height:15px;flex:none;cursor:pointer;margin:0}
+.check.disabled{opacity:.4;cursor:not-allowed}
+.check.disabled:hover{background:transparent;color:#a1a1aa}
+.check.disabled input{cursor:not-allowed}
+.hint{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;margin-left:5px;color:#6b6b6b;cursor:default;flex:none}
+.hint svg{width:14px;height:14px;display:block;transition:color .15s ease}
+.hint .tip{position:absolute;left:50%;bottom:150%;transform:translate(-50%,3px);display:flex;align-items:center;justify-content:center;padding:5px 9px;background:#1c1c1c;border:1px solid #3f4148;color:#e5e5e5;font-size:12px;line-height:1.35;white-space:nowrap;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .15s ease,transform .15s ease;z-index:20}
+.hint .tip::after{content:'';position:absolute;left:50%;top:100%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#3f4148}
+.hint:hover svg,.hint:focus svg{color:#fafafa}
+.hint:focus{outline:none}
+.hint:hover .tip,.hint:focus .tip{opacity:1;visibility:visible;transform:translate(-50%,0)}
+
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.settings-grid .card{margin:0;min-width:0}
+.settings-row{display:grid;grid-template-columns:27.5% 27.5% 27.5% 17.5%;gap:0;align-items:center}
+
+/* One shared row geometry: both the footer buttons and the GitHub link are
+   28px tall and vertically centred on the same line. */
+/* The GitHub link shares this exact row, so both are centred on one line. */
+footer{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:0;padding-bottom:8px;flex:none;min-width:0}
+/* The actions never shrink: the carousel text yields its space instead, so a
+   long counter can never push the buttons out of the window. */
+.footer-actions{display:flex;align-items:center;gap:8px;margin-left:auto;flex:none}
+/* The hint sits before the label here, so give it trailing space instead. */
+.footer-actions .hint{margin-left:0;margin-right:2px}
+.footer-actions button{height:28px;padding:4px 10px;line-height:20px;display:inline-flex;align-items:center;gap:6px;flex:none;white-space:nowrap}
+.mon-icon{flex:none}
+.mon-icon.beating{animation:mon-beat 1s ease-in-out infinite}
+@keyframes mon-beat{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.86)}}
+.gh-link{display:flex;align-items:center;justify-content:flex-start;gap:7px;height:28px;min-width:0;flex:0 1 auto;color:#6b6b6b;background:transparent;text-decoration:none;cursor:pointer;transition:color .15s ease}
+.gh-link svg{width:19px;height:19px;display:block;flex:none}
+.star-message{font-size:12px;white-space:nowrap;line-height:1;display:block;overflow:hidden;text-overflow:ellipsis;min-width:0;animation:star-fade 5s ease}
+@keyframes star-fade{0%{opacity:0}10%{opacity:1}90%{opacity:1}100%{opacity:0}}
+.gh-link:hover{color:#fafafa}
+.secondary{background:#121212;color:#f3f4f6;border:1px solid #3f4148}
+.secondary:hover{background:#232323;border-color:#6b6b6b;color:#fff}
+.secondary:active{background:#2e2e2e}
+.primary{background:#fafafa;color:#0a0a0a}
+.primary:hover{background:#fff;box-shadow:0 0 0 3px #fafafa26}
+.primary:active{background:#d4d4d4}
+.danger{background:#dc2626;color:#fff}
+.danger:hover{background:#ef4444;box-shadow:0 0 0 3px #dc262633}
+.danger:active{background:#b91c1c}
+button:disabled{opacity:.45;cursor:not-allowed}
+
+.log-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}.log-head h2{margin:0;font-size:13px}.card label.log-auto{display:flex;flex-direction:row;align-items:center;justify-content:flex-end;gap:6px;margin:0;font-size:12px;line-height:15px;color:#a1a1aa;cursor:pointer}.card .log-auto input{display:block;width:15px;height:15px;min-width:15px;min-height:15px;margin:0;accent-color:#fafafa;flex:none}.card .log-auto span{display:block;line-height:15px;white-space:nowrap}.log-box{height:112px;margin:0;overflow:auto;white-space:pre-wrap;word-break:break-all;background:#0a0a0a;border:1px solid #2a2a2d;color:#67e8f9;padding:7px;font:11px Consolas,monospace;line-height:1.5;scrollbar-width:thin;scrollbar-color:#3f4148 #0a0a0a}.log-box::-webkit-scrollbar{width:8px;height:8px;border-radius:0;-webkit-appearance:none}.log-box::-webkit-scrollbar-track,.log-box::-webkit-scrollbar-track-piece,.log-box::-webkit-scrollbar-corner,.log-box::-webkit-scrollbar-button{background:#0a0a0a;border-radius:0;-webkit-appearance:none}.log-box::-webkit-scrollbar-thumb{background:#3f4148;border:2px solid #0a0a0a;border-radius:0;-webkit-appearance:none}.log-box::-webkit-scrollbar-thumb:hover{background:#01cdfe;border-radius:0}.log-error{color:#ef4444}
+
+/* Drag-and-drop overlay: blurs the page behind it so the drop target is
+   unmistakable, and lists what the drop would actually do. */
+/* Drag-and-drop overlay: blurs the page behind it so the drop target is
+   unmistakable, and lists what the drop would actually do. Both fade in and
+   fade out are animated; the node stays mounted briefly while fading out. */
+.drop-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;background:#0a0a0acc;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);pointer-events:none;opacity:0;transition:opacity .15s ease}
+.drop-overlay.shown{opacity:1}
+.drop-overlay .drop-card{transform:scale(.97);transition:transform .15s ease}
+.drop-overlay.shown .drop-card{transform:scale(1)}
+.drop-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;width:320px;min-height:160px;padding:22px 30px;border:1px dashed #67e8f9;background:#121212d9;text-align:center;contain:layout paint}
+.drop-icon{color:#67e8f9}
+.drop-title{font-size:15px;font-weight:700;color:#fafafa}
+.drop-hint{font-size:12px;color:#a1a1aa}
+.drop-list{display:flex;flex-wrap:wrap;align-content:flex-start;justify-content:center;gap:6px;margin-top:3px;min-height:24px;max-height:48px;overflow:hidden}
+.drop-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;font-size:11px;border:1px solid #2a2a2d}
+.drop-tag.ok{color:#67e8f9;border-color:#2b4552;background:#1b2a33}
+.drop-tag.bad{color:#fca5a5;border-color:#4a2626;background:#2b1717}.queue-head,.queue-current{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.queue-head span,.queue-current b{font-size:12px;color:#a1a1aa}
+.queue-counts{flex:none;white-space:nowrap}
+.queue-counts b{color:#fafafa;font-weight:700}
+.queue-current{margin-top:4px;font-size:12px;color:#f3f4f6}
+.queue-file{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.queue-status{flex:none;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.progress-track{height:6px;margin-top:7px;background:#2a2a2d;overflow:hidden}
+.progress-track i{display:block;height:100%;background:#01cdfe;transition:width .05s linear}
+.error{padding:8px 10px;background:#3b1717;color:#fca5a5;font-size:12px;margin-top:10px}

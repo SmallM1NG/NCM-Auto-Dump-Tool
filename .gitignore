@@ -1,0 +1,8 @@
+node_modules/
+dist/
+webview/
+src-tauri/target/
+build-portable.ps1
+bulid portable.bat
+start dev.bat
+LICENSE.txt
