@@ -45,3 +45,4 @@
 :root[data-theme="light"] .drop-tag.ok,:root[data-theme="system"] .drop-tag.ok{color:#008b8b;border-color:#b8e5e5;background:#e1f7f7}
 :root[data-theme="light"] .drop-tag.bad,:root[data-theme="system"] .drop-tag.bad{color:#b42318;border-color:#f1c3bf;background:#fff0ee}
 .theme-button{grid-column:auto;height:26px;padding:3px 2px;font-size:12px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+
