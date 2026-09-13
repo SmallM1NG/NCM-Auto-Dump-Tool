@@ -73,6 +73,8 @@ NCM-Auto-Dump-Tool（简称 NADT）是一款简单的小工具，可以自动监
 
 前往 [Releases](https://github.com/SmallM1NG/NCM-Auto-Dump-Tool/releases/latest) 下载最新版本，安装包版运行安装程序并按照提示完成安装，双击桌面快捷方式即可，便携版将压缩包完整解压到任意目录，随后运行 NADT.exe 即可。
 
+---
+
 <a id="如何使用"></a>
 ## 如何使用 ▶️
 
