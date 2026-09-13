@@ -6,3 +6,5 @@ build-portable.ps1
 bulid portable.bat
 start dev.bat
 LICENSE.txt
+data/settings.json
+data/nadt.log
