@@ -29,6 +29,7 @@
 :root[data-theme="light"] .progress-track,:root[data-theme="system"] .progress-track{background:#d7dfe6}
 :root[data-theme="light"] .progress-track i,:root[data-theme="system"] .progress-track i{background:#00AEAE}
 :root[data-theme="light"] .log-box,:root[data-theme="system"] .log-box{border-color:var(--border);color:#00AEAE;scrollbar-color:#aeb9c5 #eef2f5}
+:root[data-theme="light"] .log-clear{color:#4c5966}:root[data-theme="light"] .log-clear:hover{color:#17202a;background:#dce4eb}:root[data-theme="light"] .log-clear:active{color:#17202a;background:#cbd5df}
 :root[data-theme="light"] .secondary,:root[data-theme="system"] .secondary{background:var(--surface);color:var(--text);border-color:var(--border)}
 :root[data-theme="light"] .primary,:root[data-theme="system"] .primary{background:#17202a;color:#fff}
 :root[data-theme="light"] .check:hover,:root[data-theme="system"] .check:hover{background:#17202a0c;color:var(--text)}
@@ -51,3 +52,23 @@
 :root[data-theme="light"] .update-card,:root[data-theme="system"] .update-card{background:#fff;border-color:#d7dde5;box-shadow:0 12px 32px #29465522}
 :root[data-theme="light"] .update-card h2,:root[data-theme="system"] .update-card h2{color:#17202a}
 :root[data-theme="light"] .update-card p,:root[data-theme="system"] .update-card p,:root[data-theme="light"] .update-countdown,:root[data-theme="system"] .update-countdown{color:#687482}
+
+/* Light-only interaction palette: override dark defaults that are otherwise
+   inherited by hover states, tooltips and secondary controls. */
+:root[data-theme="light"] .hint{color:#687482}
+:root[data-theme="light"] .hint:hover svg,:root[data-theme="light"] .hint:focus svg{color:#17202a}
+:root[data-theme="light"] .hint .tip{background:#fff;border-color:#b8c3cf;color:#17202a;box-shadow:0 6px 16px #26384a1f}
+:root[data-theme="light"] .hint .tip::after{border-top-color:#b8c3cf}
+:root[data-theme="light"] .directories .hint .tip::after{border-top-color:transparent;border-right-color:#b8c3cf}
+:root[data-theme="light"] .secondary:hover{background:#eef2f5;border-color:#aab7c4;color:#17202a}
+:root[data-theme="light"] .secondary:active{background:#dce4eb}
+:root[data-theme="light"] .primary:hover{background:#26384a;color:#fff;box-shadow:0 0 0 3px #26384a1a}
+:root[data-theme="light"] .primary:active{background:#0f1720}
+:root[data-theme="light"] .win-btn:active{background:#cbd5df;color:#17202a}
+:root[data-theme="light"] .card label.log-auto{color:#687482}
+:root[data-theme="light"] .card .log-auto input{accent-color:#17202a}
+:root[data-theme="light"] .error{background:#fff0ee;color:#b42318;border:1px solid #f1c3bf}
+:root[data-theme="light"] .update-version{color:#687482}
+:root[data-theme="light"] .update-card{box-shadow:0 12px 32px #29465522}
+:root[data-theme="light"] .update-actions .secondary:hover{background:#eef2f5;color:#17202a}
+:root[data-theme="light"] .update-actions .primary:hover{background:#26384a;color:#fff}
