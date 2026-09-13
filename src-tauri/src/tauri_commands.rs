@@ -409,3 +409,4 @@ pub fn stop_monitor(app: tauri::AppHandle, state: State<'_, AppState>) -> Result
     }
     Ok(())
 }
+
