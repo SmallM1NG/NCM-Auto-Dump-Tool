@@ -105,6 +105,8 @@ NCM-Auto-Dump-Tool（简称 NADT）是一款简单的小工具，可以自动监
 
 请确保符合“如何安装”条目中写明的系统要求，并尝试更换安装目录。
 
+---
+
 #### 2. 处理后的文件缺少封面？
 
 可能是元数据内本身就没有带封面。软件并没有联网获取封面的功能，只会解析文件内的封面信息。
@@ -113,22 +115,34 @@ NCM-Auto-Dump-Tool（简称 NADT）是一款简单的小工具，可以自动监
 
 3.0 版本网易云在下载时部分曲目会附带一个 LRC 文件。如果软件在处理曲目时发现有同名 LRC 文件，则会自动写入 Tag 中的 `lyrics` 字段；没有同名 LRC 文件则跳过处理。
 
+---
+
 ### BUG 汇报 😨
 
 请详细描述遇到的问题：**具体行为**、是否可以复现，并提供 **NADT 版本**、**Windows 版本**、复现步骤、相关截图以及运行日志文件。
+
+---
 
 ### 鸣谢 🙌
 
 [ncmdump](https://github.com/taurusxin/ncmdump)
 
+---
+
 ### LINK 🔗
 
 <p align="center"><a href="https://space.bilibili.com/475951038">BILIBILI</a></p>
+
+---
 
 ### 捐赠 🧋
 
 <p align="center">
 	🥰请我喝奶茶喵 谢谢你喵🥰
+</p>
+
+<p align="center">
+	<img width="420" src="Docs/imgs/qrcode.jpg" alt="请我喝奶茶">
 </p>
 
 
