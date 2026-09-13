@@ -51,3 +51,4 @@ pub fn history() -> Vec<String> {
 fn timestamp() -> String {
     chrono::Local::now().format("%H:%M:%S").to_string()
 }
+
