@@ -27,7 +27,7 @@ function App(){
        const response=await fetch('https://api.github.com/repos/SmallM1NG/NCM-Auto-Dump-Tool/releases/latest',{headers:{Accept:'application/vnd.github+json'},signal:controller.signal});
        if(!response.ok)throw new Error(`HTTP ${response.status}`);
        const release=await response.json();
-       const available=isNewer(release.tag_name,version);
+       setLatestVersion(release.tag_name||'');const available=isNewer(release.tag_name,version);
        setUpdateState(available?'available':'none');
        setHasUpdate(available);
      }catch(e){
