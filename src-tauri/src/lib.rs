@@ -129,7 +129,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .setup(move |app| {
             if let Err(e) = logger::init() { eprintln!("NADT: {e}"); }
-            logger::write(Some(app.handle()), "INFO", format!("NADT 启动 | 数据目录: {}",
+            logger::write(Some(app.handle()), "INFO", format!("NADT 启动 | 当前数据目录: {}",
                 settings::data_dir().map(|p| p.display().to_string()).unwrap_or_else(|_| "未知".into())));
             // One queue serves both the watcher and manual drops.
             tauri_commands::start_queue(app.handle());
@@ -184,14 +184,11 @@ pub fn run() {
                     let _ = window.set_position(tauri::LogicalPosition::new(w.x, w.y));
                     if w.maximized { let _ = window.maximize(); }
                 }
-                Some(w) => {
+                Some(_) => {
                     let _ = window.center();
-                    logger::write(Some(app.handle()), "INFO", format!(
-                        "窗口位置 ({}, {}) 不在任何显示器内，改为居中显示", w.x, w.y));
                 }
                 None => {
                     let _ = window.center();
-                    logger::write(Some(app.handle()), "INFO", "首次启动，窗口居中显示");
                 }
             }
             // The single moment the window becomes visible, and only after its
