@@ -45,3 +45,9 @@
 :root[data-theme="light"] .drop-tag.ok,:root[data-theme="system"] .drop-tag.ok{color:#008b8b;border-color:#b8e5e5;background:#e1f7f7}
 :root[data-theme="light"] .drop-tag.bad,:root[data-theme="system"] .drop-tag.bad{color:#b42318;border-color:#f1c3bf;background:#fff0ee}
 .theme-button{grid-column:auto;height:26px;padding:3px 2px;font-size:12px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+:root[data-theme="light"] .update-version:hover,:root[data-theme="system"] .update-version:hover{color:#000}
+:root[data-theme="light"] .latest-version,:root[data-theme="system"] .latest-version{color:#000;text-shadow:0 0 6px #0005}
+:root[data-theme="light"] .update-overlay,:root[data-theme="system"] .update-overlay{background:#eef3f6dd}
+:root[data-theme="light"] .update-card,:root[data-theme="system"] .update-card{background:#fff;border-color:#d7dde5;box-shadow:0 12px 32px #29465522}
+:root[data-theme="light"] .update-card h2,:root[data-theme="system"] .update-card h2{color:#17202a}
+:root[data-theme="light"] .update-card p,:root[data-theme="system"] .update-card p,:root[data-theme="light"] .update-countdown,:root[data-theme="system"] .update-countdown{color:#687482}

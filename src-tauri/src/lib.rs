@@ -126,6 +126,7 @@ pub fn run() {
             processed: Arc::new(std::sync::atomic::AtomicUsize::new(0)),
         })
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_opener::init())
         .setup(move |app| {
             if let Err(e) = logger::init() { eprintln!("NADT: {e}"); }
             logger::write(Some(app.handle()), "INFO", format!("NADT 启动 | 数据目录: {}",
@@ -243,7 +244,7 @@ pub fn run() {
                 tauri_commands::quit_app(window.app_handle().clone(), window.state::<AppState>());
             }
         })
-        .invoke_handler(tauri::generate_handler![tauri_commands::get_config, tauri_commands::save_config, tauri_commands::open_url, tauri_commands::set_always_on_top, tauri_commands::hide_window, tauri_commands::clear_notification_registry, tauri_commands::is_monitoring, tauri_commands::get_logs, tauri_commands::enqueue_files, tauri_commands::resolve_download_dir, tauri_commands::start_monitor, tauri_commands::stop_monitor, tauri_commands::quit_app])
+        .invoke_handler(tauri::generate_handler![tauri_commands::get_config, tauri_commands::save_config, tauri_commands::set_always_on_top, tauri_commands::hide_window, tauri_commands::clear_notification_registry, tauri_commands::is_monitoring, tauri_commands::get_logs, tauri_commands::enqueue_files, tauri_commands::resolve_download_dir, tauri_commands::start_monitor, tauri_commands::stop_monitor, tauri_commands::quit_app])
         .run(tauri::generate_context!())
         .expect("error while running Tauri application");
 }

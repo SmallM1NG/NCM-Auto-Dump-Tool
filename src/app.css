@@ -128,3 +128,13 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .progress-track{height:6px;margin-top:7px;background:#2a2a2d;overflow:hidden}
 .progress-track i{display:block;height:100%;background:#01cdfe;transition:width .05s linear}
 .error{padding:8px 10px;background:#3b1717;color:#fca5a5;font-size:12px;margin-top:10px}
+
+.update-version{position:relative;border:0;background:transparent;color:#6b6b6b;cursor:pointer;font:inherit;font-size:12px;font-weight:400;padding:0;line-height:1;transition:color .15s ease}
+.update-version:hover{color:#fff}
+.update-dot{position:absolute;top:-3px;right:-6px;width:4px;height:4px;background:#ef4444}
+.update-overlay{position:fixed;inset:0;z-index:220;display:flex;align-items:center;justify-content:center;background:#0a0a0acc;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);animation:update-fade .15s ease both}
+@keyframes update-fade{from{opacity:0}to{opacity:1}}
+.update-card{width:320px;height:160px;padding:22px 24px;background:#121212;border:1px solid #3f4148;box-shadow:0 12px 32px #0009;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.update-card h2{margin:0 0 12px;font-size:16px;color:#fafafa}.update-card p{margin:0;color:#a1a1aa;font-size:13px;line-height:1.5}.update-actions{display:flex;justify-content:center;gap:8px;margin-top:20px}.update-actions button{min-width:64px;height:30px;padding:4px 12px}
+.update-countdown{margin-top:8px;color:#a1a1aa;font-size:12px;line-height:1.2}
+.latest-version{color:#fff;font-weight:700;text-shadow:0 0 6px #fff8}

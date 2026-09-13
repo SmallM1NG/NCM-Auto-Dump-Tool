@@ -1,6 +1,6 @@
 [package]
 name = "nadt"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Tauri App"
 authors = ["you"]
 license = ""
@@ -23,6 +23,7 @@ serde = { version = "1.0", features = ["derive"] }
 chrono = { version = "0.4", default-features = false, features = ["clock"] }
 tauri = { version = "2.11.3", features = ["tray-icon"] }
 tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
 notify = "8"
 aes = "0.8"
 cipher = "0.4"

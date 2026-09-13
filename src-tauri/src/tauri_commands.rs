@@ -27,11 +27,6 @@ pub fn save_config(app: tauri::AppHandle, state: State<'_, AppState>, config: Co
     Ok(())
 }
 #[tauri::command]
-pub fn open_url(url: String) -> Result<(), String> {
-    if !url.starts_with("https://") && !url.starts_with("http://") { return Err("仅支持 http(s) 链接".into()); }
-    std::process::Command::new("cmd").args(["/C", "start", "", &url]).spawn().map(|_| ()).map_err(|e| e.to_string())
-}
-#[tauri::command]
 pub fn set_always_on_top(window: tauri::Window, enabled: bool) -> Result<(), String> { window.set_always_on_top(enabled).map_err(|e| e.to_string()) }
 /// Hide the window into the tray instead of closing the application.
 /// Hide the window into the tray, remembering its geometry first.
