@@ -31,3 +31,4 @@ image = { version = "0.25", default-features = false, features = ["png"] }
 
 [target.'cfg(windows)'.dependencies]
 winrt-notification = "0.5"
+
