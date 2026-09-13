@@ -48,4 +48,3 @@ where P: AsRef<Path>, F: Fn(String) + Send + 'static {
     });
     Ok(())
 }
-
