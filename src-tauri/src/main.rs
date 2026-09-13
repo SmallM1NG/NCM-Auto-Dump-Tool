@@ -4,4 +4,3 @@
 fn main() {
   nadt_lib::run();
 }
-
