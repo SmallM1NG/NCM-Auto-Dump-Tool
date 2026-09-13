@@ -9,7 +9,7 @@
 	<img alt="Windows x64" src="https://img.shields.io/badge/Windows-x64-0078D6.svg?logo=windows&logoColor=white&style=for-the-badge">
 	<img alt="Tauri 2" src="https://img.shields.io/badge/Tauri-2-FFC131.svg?logo=tauri&logoColor=white&style=for-the-badge">
 	<img alt="React 19" src="https://img.shields.io/badge/React-19-61DAFB.svg?logo=react&logoColor=white&style=for-the-badge">
-	<a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-TBD-red.svg?style=for-the-badge"></a>
+	<a href="LICENSE"><img alt="License: GPLv3" src="https://img.shields.io/badge/License-GPLv3-red.svg?style=for-the-badge"></a>
 	<a href="https://github.com/SmallM1NG/NCM-Auto-Dump-Tool/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/SmallM1NG/NCM-Auto-Dump-Tool?style=for-the-badge"></a>
 </p>
 
