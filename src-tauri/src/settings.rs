@@ -131,3 +131,4 @@ fn ensure_output_dir(cfg: &Config) {
 }
 
 pub fn save(cfg:&Config)->io::Result<()> { let p=config_path()?; if let Some(parent)=p.parent(){fs::create_dir_all(parent)?;} fs::write(p, serde_json::to_vec_pretty(cfg)?) }
+
