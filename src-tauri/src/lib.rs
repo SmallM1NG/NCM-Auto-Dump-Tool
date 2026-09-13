@@ -1,4 +1,3 @@
-// NADT backend modules
 pub mod ncm_decrypt;
 pub mod settings;
 pub mod file_watcher;
