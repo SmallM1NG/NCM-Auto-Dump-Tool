@@ -18,7 +18,7 @@ pub fn save_config(app: tauri::AppHandle, state: State<'_, AppState>, config: Co
     settings::save(&config).map_err(|e| e.to_string())?;
     *guard = config.clone();
     let mut changed = Vec::new();
-    macro_rules! diff { ($field:ident) => { if old.$field != config.$field { changed.push(format!("{}: {:?} → {:?}", stringify!($field), old.$field, config.$field)); } }; }
+    macro_rules! diff { ($field:ident) => { if old.$field != config.$field { changed.push(format!("{}: {} → {}", stringify!($field), old.$field, config.$field)); } }; }
     diff!(download_dir); diff!(output_dir); diff!(theme); diff!(enable_notification); diff!(enable_sound); diff!(enable_tray_flash); diff!(minimal_metadata); diff!(embed_lrc); diff!(shred_mode); diff!(always_on_top); diff!(close_to_tray); diff!(silent_start);
     // `total_processed` is intentionally not part of the diff: it is not a
     // user-editable setting.
@@ -148,12 +148,6 @@ pub fn start_monitor(app: tauri::AppHandle, state: State<'_, AppState>) -> Resul
         crate::desktop_notify::send_notification("监控已启动", watch_dir.to_string_lossy().as_ref(), sound_enabled);
     }
     let shred_mode = cfg.shred_mode;
-    crate::logger::write(Some(&app), "INFO", format!("监控已启动 | 监控目录: {} | 输出目录: {}", watch_dir.display(), output.display()));
-    let mut enabled = Vec::new();
-    if minimal_metadata { enabled.push("极简模式"); }
-    if embed_lrc { enabled.push("写入 LRC 歌词文件"); }
-    if shred_mode { enabled.push("删除原始文件"); }
-    crate::logger::write(Some(&app), "INFO", format!("输出设置: {}", if enabled.is_empty() { "全部关闭".to_string() } else { enabled.join("、") }));
     // Both the watcher and manual drops feed the one shared queue, so only a
     // single file is ever processed at a time and the counters stay coherent.
     let queue_tx = state.queue_tx.lock().map_err(|e| e.to_string())?.clone()
@@ -172,7 +166,14 @@ pub fn start_monitor(app: tauri::AppHandle, state: State<'_, AppState>) -> Resul
     }).map_err(|e| {
         crate::logger::write(None, "ERROR", format!("启动目录监控失败: {}", e));
         e.to_string()
-    })
+    })?;
+    crate::logger::write(Some(&app), "INFO", format!("监控已启动 | 监控目录: {} | 输出目录: {}", watch_dir.display(), output.display()));
+    let mut enabled = Vec::new();
+    if minimal_metadata { enabled.push("极简模式"); }
+    if embed_lrc { enabled.push("写入 LRC 歌词文件"); }
+    if shred_mode { enabled.push("删除原始文件"); }
+    if !enabled.is_empty() { crate::logger::write(Some(&app), "INFO", format!("输出设置: {}", enabled.join("、"))); }
+    Ok(())
 }
 
 /// Start the single work queue. Called once at startup.
@@ -262,12 +263,10 @@ pub fn start_queue(app: &tauri::AppHandle) {
 #[tauri::command]
 pub fn enqueue_files(app: tauri::AppHandle, state: State<'_, AppState>, paths: Vec<String>) -> Result<usize, String> {
     let mut accepted = Vec::new();
-    let mut rejected = Vec::new();
     for p in paths {
         let path = std::path::Path::new(&p);
         let is_ncm = path.extension().and_then(|x| x.to_str()).is_some_and(|x| x.eq_ignore_ascii_case("ncm"));
-        if !is_ncm || !path.is_file() { rejected.push(p); continue; }
-        accepted.push(p);
+        if is_ncm && path.is_file() { accepted.push(p); }
     }
     if accepted.is_empty() {
         return Err("没有可处理的 .ncm 文件".into());
@@ -286,10 +285,6 @@ pub fn enqueue_files(app: tauri::AppHandle, state: State<'_, AppState>, paths: V
         "queued": state.pending.load(Ordering::Relaxed),
         "processed": state.processed.load(Ordering::Relaxed),
     }));
-    for p in &rejected {
-        crate::logger::write(Some(&app), "ERROR", format!("已忽略非 NCM 文件: {}",
-            std::path::Path::new(p).file_name().and_then(|x| x.to_str()).unwrap_or(p)));
-    }
     Ok(count)
 }
 
@@ -318,8 +313,6 @@ pub fn save_window_state(app: &tauri::AppHandle, state: &State<'_, AppState>) {
             let snapshot = guard.clone();
             drop(guard);
             let _ = crate::settings::save(&snapshot);
-            crate::logger::write(Some(app), "INFO", format!(
-                "窗口状态已保存: 保留 {}x{} (最大化={})", geom.width, geom.height, maximized));
         }
         return;
     }
@@ -342,8 +335,6 @@ pub fn save_window_state(app: &tauri::AppHandle, state: &State<'_, AppState>) {
         let snapshot = guard.clone();
         drop(guard);
         let _ = crate::settings::save(&snapshot);
-        crate::logger::write(Some(app), "INFO", format!(
-            "窗口状态已保存: ({}, {}) {}x{}", geom.x, geom.y, geom.width, geom.height));
     }
 }
 
@@ -373,11 +364,10 @@ pub fn quit_app(app: tauri::AppHandle, state: State<'_, AppState>) {
     app.exit(0);
 }
 
-fn stop_monitor_inner(app: &tauri::AppHandle, state: &State<'_, AppState>) {
+fn stop_monitor_inner(_app: &tauri::AppHandle, state: &State<'_, AppState>) {
     if let Ok(mut guard) = state.monitor_stop.lock() {
         if let Some(flag) = guard.take() {
             flag.store(true, Ordering::Relaxed);
-            crate::logger::write(Some(app), "INFO", "监控已停止 (退出程序)");
         }
     }
     if let Ok(mut s) = state.session.lock() { *s = None; }
@@ -400,7 +390,7 @@ pub fn stop_monitor(app: tauri::AppHandle, state: State<'_, AppState>) -> Result
                 }
             }
         }
-        None => crate::logger::write(Some(&app), "ERROR", "停止监控失败: 监控当前未运行"),
+        None => {},
     }
     Ok(())
 }
